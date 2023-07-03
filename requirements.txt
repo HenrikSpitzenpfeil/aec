@@ -1,0 +1,7 @@
+langpy
+secm
+autolab
+pandas
+os
+math
+matplotlib
