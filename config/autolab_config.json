@@ -1,0 +1,6 @@
+{
+    "adk": "C:\\Program Files\\Metrohm Autolab\\Nova 2.1\\config\\Adk",
+    "sdk": "C:\\Program Files\\Metrohm Autolab\\Autolab SDK 2.1\\EcoChemie.Autolab.Sdk",
+    "hsf": "C:\\ProgramData\\Metrohm Autolab\\13.0\\HardwareSetup.AUT54150.xml",
+    "sim": false
+}
