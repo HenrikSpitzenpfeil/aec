@@ -1,21 +1,20 @@
-import secm
-from Experiments import Experiments
-from autolab import autolab
+from secm import SECM
+from Experiments import AbstractExperiment, LineSweep, NovaProcedure
+from autolab import Potentiostat
 
-'TODO: Implement everything'
+"""TODO: Make Experiment loading more universal so that code doesn't need to be changed """
 
 def main():
-    #microscope = secm.SECM(self, config, config, Electrode, substrate)
-    #experiment = Experiments.DummyExperiment(self, microscope)
-    number_of_experiments = int(input('Please insert Number of Experiments to perform'))
-    experiments_performed = 0
+    secm = SECM()
+    potentiostat = Potentiostat(config = config)
+    experiment = LineSweep.LineSweep(potentiostat)
+    # TODO: Implement Experiment configs
+    number_of_experiments = int(input('Please input Number of Experiments to perform'))
+    secm.new_substrate()
     
     while True:
-        if experiments_performed == number_of_experiments:
-          break
-        # elif secm.spots_left == 0:
-        #   secm.new_substrate()
-        # else:
-            # experiment.measure
-            # secm.next_spot
-            #experiments_performed += 1
+        for experiment in range(number_of_experiments):
+          experiment.measure(experiment_config)
+          experiment.save_data(save_path)
+          secm.prepare_next_experiment(config["spot_increment"])
+        
