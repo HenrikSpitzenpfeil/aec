@@ -5,3 +5,6 @@ pandas
 os
 math
 matplotlib
+dataclasses
+datetime
+csv
