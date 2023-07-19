@@ -1,4 +1,4 @@
-from AbstractExperiment import AbstractExperiment
+from Experiments.AbstractExperiment import AbstractExperiment
 from autolab import Potentiostat
 import time
 import os
@@ -35,7 +35,7 @@ class LineSweep(AbstractExperiment):
         potential_applied_list = []
         start_time = time.time()
 
-        if not self.results_data.empty(): # empty results data frame if there is data from a previous measurement
+        if not self.results_data.empty: # empty results data frame if there is data from a previous measurement
             self.results_data.drop(self.results_data.index, inplace= True)
 
         for step in range(round((end_potential- start_potential)/step_interval)):

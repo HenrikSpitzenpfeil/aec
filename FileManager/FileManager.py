@@ -31,7 +31,7 @@ class FileManager:
                            experiment_name: str,
                            ai_model_name: str = None) -> str:
         
-        """Generates the folder path from root save path and experiment name.
+        """Returns the folder path from root save path and experiment name.
         If it is an Ai experiment and an Ai model name is specified a sub directory
         of the experiment name is added to the folder path."""
 
