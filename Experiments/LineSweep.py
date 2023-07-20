@@ -38,7 +38,7 @@ class LineSweep(AbstractExperiment):
         if not self.results_data.empty: # empty results data frame if there is data from a previous measurement
             self.results_data.drop(self.results_data.index, inplace= True)
 
-        for step in range(round((end_potential- start_potential)/step_interval)):
+        for step in range(round((end_potential- start_potential)/step_potential)):
             
             self.potentiostat.set_potential(potential_to_apply)
             res_potential, res_current, res_applied_potential = self.potentiostat.get_actual_values()
