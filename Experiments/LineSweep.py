@@ -35,6 +35,10 @@ class LineSweep(AbstractExperiment):
         potential_applied_list = []
         start_time = time.time()
 
+        if self.potentiostat.instrument.Ei.Cell == False:
+            self.potentiostat.cell_on() #Turn Cell on if necessary
+        time.sleep(5)
+
         if not self.results_data.empty: # empty results data frame if there is data from a previous measurement
             self.results_data.drop(self.results_data.index, inplace= True)
 
@@ -55,6 +59,9 @@ class LineSweep(AbstractExperiment):
         self.results_data["potential"] = potential_list
         self.results_data["current"] = current_list
         self.results_data["potential_applied"] = potential_applied_list
+
+        if self.potentiostat.instrument.Ei.Cell == True:
+            self.potentiostat.cell_off() # Turn cell off if necessary
     
     def save_data(self, save_path: os.PathLike) -> None:
 
