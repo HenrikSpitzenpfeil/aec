@@ -1,4 +1,5 @@
 import os 
+from Experiments.AbstractExperiment import AbstractExperiment
 
 class FileManager:
 
@@ -20,22 +21,28 @@ class FileManager:
     def generate_file_name(self,
                            batch_id: int,
                            experiment_number: int,
-                           experiment_name: str) -> str:
+                           experiment: AbstractExperiment) -> str:
         
         """ Generates the file name for an experiment from the experiment name
           the experiment number in the current batch and the batch id."""
         
-        return "{:03d}".format(batch_id)+ "_" + "{:03d}".format(experiment_number)+ "_" + experiment_name +".csv"
+        experiment_name = experiment.__class__.__name__
+        file_ending = experiment.file_type
+        
+        return "{:03d}".format(batch_id)+ "_" + "{:03d}".format(experiment_number)+ "_" + experiment_name + file_ending
     
     def generate_folder_path(self,
-                           experiment_name: str,
-                           ai_model_name: str = None) -> str:
+                           experiment: AbstractExperiment) -> str:
         
         """Returns the folder path from root save path and experiment name.
         If it is an Ai experiment and an Ai model name is specified a sub directory
         of the experiment name is added to the folder path."""
 
-        if ai_model_name is not None:
+        experiment_name = experiment.__class__.__name__
+        
+        if experiment_name == "SmartExperimet":
+           #TODO: change this to the correct attribute names when smart experiment is implemented
+           ai_model_name = experiment.ai_model_name
            return  os.path.join(self.root_path,
                                 experiment_name,
                                 ai_model_name)
