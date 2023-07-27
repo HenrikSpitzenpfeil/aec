@@ -11,7 +11,7 @@ class NovaProcedure(AbstractExperiment):
 
         self.potentiostat = potenstiostat
         self.procedure = self.potentiostat.instrument.LoadProcedure(procedure_path)
-        self.file_type = "nox"
+        self.file_type = ".nox"
     
     def measure(self) -> None:
 
