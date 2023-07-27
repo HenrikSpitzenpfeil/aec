@@ -13,22 +13,23 @@ class LineSweep(AbstractExperiment):
     Data is stored in the results_data attribute as a pandas dataframe.
     The save_data method saves the data as a csv file to the provided location """
 
-    def __init__ (self, potentiostat: Potentiostat):
+    def __init__ (self, potentiostat: Potentiostat, settings: dict):
         
         self.potentiostat = potentiostat
         self.results_data = pd.DataFrame(columns= ["time",
                                                    "potential",
                                                    "current",
                                                    "potential_applied"])
+        self.file_type = ".csv"
+        self.start_potential = settings["start_potential"]
+        self.end_potential = settings["end_potential"]
+        self.scan_rate = settings["scan_rate"]
+        self.step_potential = settings["step_potential"]
 
-    def measure(self,
-                start_potential: float,
-                end_potential: float,
-                scan_rate: float,
-                step_potential: float) -> None:
+    def measure(self) -> None:
         
-        step_interval = step_potential/scan_rate
-        potential_to_apply = start_potential
+        step_interval = self.step_potential/self.scan_rate
+        potential_to_apply = self.start_potential
         time_list = []
         potential_list = []
         current_list = []
@@ -42,7 +43,7 @@ class LineSweep(AbstractExperiment):
         if not self.results_data.empty: # empty results data frame if there is data from a previous measurement
             self.results_data.drop(self.results_data.index, inplace= True)
 
-        for step in range(round((end_potential- start_potential)/step_potential)):
+        for step in range(round((self.end_potential- self.start_potential)/self.step_potential)):
             
             self.potentiostat.set_potential(potential_to_apply)
             res_potential, res_current, res_applied_potential = self.potentiostat.get_actual_values()
@@ -52,7 +53,7 @@ class LineSweep(AbstractExperiment):
             current_list.append(res_current)
             potential_applied_list.append(res_applied_potential)
 
-            potential_to_apply += step_potential
+            potential_to_apply += self.step_potential
             time.sleep(step_interval)
   
         self.results_data["time"] = time_list
@@ -65,4 +66,9 @@ class LineSweep(AbstractExperiment):
     
     def save_data(self, save_path: os.PathLike) -> None:
 
-        self.results_data.to_csv(save_path, sep = ",")        
+        self.results_data.to_csv(save_path, sep = ",")
+
+    def save_experiment(self, file_path: os.PathLike) -> None:
+
+        """ Saves the experiment object settings as a JSON file."""
+        ...
