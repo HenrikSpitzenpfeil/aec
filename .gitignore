@@ -4,3 +4,4 @@ build/
 autolab.egg-info/
 **/__pycache__/
 *.pyc
+**/*.mp4
