@@ -18,7 +18,7 @@ class NovaProcedure(AbstractExperiment):
         """ Measures the Objects loaded .nox procedure"""
 
         self.procedure.Measure()
-        while self.procedure.IsMeasuring():
+        while self.procedure.IsMeasuring:
             time.sleep(0.1)
 
     def save_data(self, save_path: os.PathLike) -> None:
