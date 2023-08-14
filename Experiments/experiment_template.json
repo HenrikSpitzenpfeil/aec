@@ -1,0 +1,15 @@
+{"experiment_class": "Experiment_class",
+
+"experiment_metadata":  {
+    "experiment_name": "Name",
+    "experiment_id": "Labbook Id",
+    "substrate material": "Material specs",
+    "batch_id": "Batch Id",
+    "ai_model": null,
+    "ai_model_id": null,
+    "coordinates": [0, 0]
+},
+
+"experiment_settings": {
+    "settings": "see experiment class for specifications"
+}}
