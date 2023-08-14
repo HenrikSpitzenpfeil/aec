@@ -34,7 +34,7 @@ def main():
       experiment.save_data(save_path)
       secm.prepare_next_experiment(config["spot_increment"])
 
-def input_experiment():
+def input_experiment() -> os.PathLike:
 
   """Prompt user to input the path to the Experiment file to be executed"""
 

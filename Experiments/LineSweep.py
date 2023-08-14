@@ -13,7 +13,7 @@ class LineSweep(AbstractExperiment):
     Data is stored in the results_data attribute as a pandas dataframe.
     The save_data method saves the data as a csv file to the provided location """
 
-    def __init__ (self, potentiostat: Potentiostat, settings: dict):
+    def __init__ (self, potentiostat: Potentiostat, settings: dict) -> None:
         
         self.potentiostat = potentiostat
         self.results_data = pd.DataFrame(columns= ["time",
