@@ -1,1 +1,1 @@
-from definitions import *
+from .definitions import *

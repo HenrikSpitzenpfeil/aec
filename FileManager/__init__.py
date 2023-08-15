@@ -1,2 +1,2 @@
-from DataFile import *
-from FileManager import *
+from .DataFile import *
+from .FileManager import *

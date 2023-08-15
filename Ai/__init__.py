@@ -1,2 +1,2 @@
-from AbstractAi import AbstractAi
-from OerEnvironment import OerEnvironment
+from .AbstractAi import AbstractAi
+from .OerEnvironment import OerEnvironment

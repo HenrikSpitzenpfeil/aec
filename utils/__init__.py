@@ -1,1 +1,1 @@
-from data_treatment import *
+from .data_treatment import *
