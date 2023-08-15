@@ -8,3 +8,6 @@ matplotlib
 dataclasses
 datetime
 csv
+gym
+tf-agents
+tensorflow
