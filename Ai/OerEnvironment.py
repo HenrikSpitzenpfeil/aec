@@ -4,8 +4,7 @@ import os
 import pandas as pd
 
 
-from ..utils.data_treatment import current_density
-from ..config.definitions import ROOT_DIR
+from .utils import current_density
 from gym.core import Env
 from gym import spaces
 from autolab import Potentiostat
