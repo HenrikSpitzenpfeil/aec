@@ -13,6 +13,9 @@ from math import pi
 
 class OerEnvironment (Env):
 
+    """An Open Ai Gym environment for the Sensolytics SECM
+      and a Metrohm Autolab Potentiostat"""
+
     def __init__(self, potentiostat: Potentiostat, secm: SECM) -> None:
         
         #TODO: how to check if potentiostat is connected
@@ -82,16 +85,24 @@ class OerEnvironment (Env):
         self.episode_length = 0
     
     def close(self):
+        """Closes the environment and resets the SECM position to wash."""
         self.secm.move_to_wash()
         #TODO: shut off and disconnect potentiostat
 
-    def reward_function(self, target_overpotential: float, observed_overpotential: float) -> float:
+    def reward_function(self, target_overpotential: float,
+                        observed_overpotential: float) -> float:
+        
         """Calculates the reward for an observed overpotential and a given target overpotential.
         Reward is normalized to the target overpotential."""
+
         return (target_overpotential-observed_overpotential)/target_overpotential
 
     def measure_overpotential(self, procedure_path) -> float:
         
+        """Uses a predefined nova procedure to measure a linear sweep.
+        Interpolates the overpotential at 0.01 A/cm^-2 by linear interpolation.
+        This method has to many responsibilities should probably be split up."""
+
         def overpotential(polyfit: np.array) -> float:
             return (0.01-polyfit[1])/polyfit[0]
 
