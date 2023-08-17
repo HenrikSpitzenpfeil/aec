@@ -64,6 +64,8 @@ class OerEnvironment (Env):
         time.sleep(self.wait_time)
 
         if self.episode_length >= self.max_episode_length:
+            if self.potentiostat.instrument.Ei.Cell:
+                self.potentiostat.cell_off
             overpotential = self.measure_overpotential(self.overpotential_procedure)
             reward = self.reward_function(target, overpotential)
             done = True
@@ -80,14 +82,20 @@ class OerEnvironment (Env):
         return observation, reward, done, info
 
     def reset(self) -> None:
-        self.secm.move_to_next_experiment(self.distance_between_spots)
+        self.secm.prepare_next_experiment(self.distance_between_spots)
         self.state = self.start_potential
+
+        if self.potentiostat.instrument.Ei.Cell == False:
+            self.potentiostat.cell_on()
+        self.potentiostat.set_potential(self.state)
         self.episode_length = 0
     
     def close(self):
         """Closes the environment and resets the SECM position to wash."""
         self.secm.move_to_wash()
         #TODO: shut off and disconnect potentiostat
+        if self.potentiostat.instrument.Ei.Cell:
+            self.potentiostat.cell_off()
 
     def reward_function(self, target_overpotential: float,
                         observed_overpotential: float) -> float:
@@ -115,13 +123,12 @@ class OerEnvironment (Env):
         df = pd.DataFrame()    
         
         #Grab the data from the measured procedure
-        command = procedure.Commands["CV staircase"]
+        command = procedure.Commands["Overpotential CV"]
         for column in command.Signals.Names:
             if len(list(command.Signals.get_Item(column).Value)) != 0:
                 df[column] = list(command.Signals.get_Item(column).Value)
         # Calculate the current density from the data
         df["current density"] = df["WE(1).Current"].map(current_density)
-        df = df.loc[df['Scan'] == 1]
         
         #linear interpolation of the values around the overpotential at 0.01 A/cm-2
         line_fit_table = df.loc[(df["current density"]> 0.008) & (df["current density"] < 0.015) & (df["Index"] < 250)]
