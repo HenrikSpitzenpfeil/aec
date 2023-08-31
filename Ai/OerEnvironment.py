@@ -4,9 +4,9 @@ import os
 import pandas as pd
 
 
-from .utils import current_density
-from gym.core import Env
-from gym import spaces
+#from .utils import current_density
+from gymnasium.core import Env
+from gymnasium import spaces
 from autolab import Potentiostat
 from secm import SECM
 from math import pi
@@ -137,11 +137,11 @@ class OerEnvironment (Env):
     
 class OerEnvironmentSim (Env):
 
-    def __init__(self, potentiostat: Potentiostat, secm: SECM) -> None:
+    def __init__(self) -> None:
         
         #TODO: how to check if potentiostat is connected
-        self.potentiostat = potentiostat
-        self.secm = secm
+        # self.potentiostat = potentiostat
+        # self.secm = secm
         
         #Distance between experiment spots on the substrate surface
         self.distance_between_spots = 2500
@@ -150,7 +150,7 @@ class OerEnvironmentSim (Env):
         self.max_episode_length = 10
         
         # Starting potential to be applied at the beginning of an epsiode
-        self.start_potential = 0 #V
+        self.start_potential = 0.2 #V
         # Rate at which the potential can be changed by the agent
         self.scan_rate = 0.005 #V/s
         # Change of potential for each step
@@ -162,7 +162,7 @@ class OerEnvironmentSim (Env):
         #TODO: should probably rename this attribute
         self.state = self.start_potential
         self.action_space = spaces.Discrete(n = 3)
-        self.observation_space = spaces.Box(low = np.array([0, -0.03, -0.1]), high = np.array([0.65, np.inf, 0.7]))
+        self.observation_space = spaces.Box(low = np.array([-1000, -1000, -1000]), high = np.array([1000, 1000, 1000]))
         self.spec = None
 
         self.overpotential_procedure = "Overpotential.nox"
@@ -181,16 +181,16 @@ class OerEnvironmentSim (Env):
         #Increment episode length
         self.episode_length += 1
         #Set state as potential 
-        self.potentiostat.set_potential(self.state)
+        #self.potentiostat.set_potential(self.state)
         #Wait for until next step can be executed
         time.sleep(self.wait_time)
 
         if self.episode_length >= self.max_episode_length:
             print("measuring overpotential")
             reward = 1
-            done = True
+            terminated = True
         else: 
-            done = False
+            terminated = False
             reward = 0
         
         #Get the state of the experiment from the potentiostat
@@ -199,16 +199,16 @@ class OerEnvironmentSim (Env):
         # Placeholder for info
         info = {}
 
-        return observation, reward, done, info
+        return observation, reward, terminated, False, info
 
-    def reset(self) -> tuple:
+    def reset(self, seed: None = None) -> tuple:
     #TODO: Implement this correctly according to open ai gym specifications
         print("reseting the environment")
         self.state = self.start_potential
         self.episode_length = 0
-        self.potentiostat.set_potential(self.state)
+        #self.potentiostat.set_potential(self.state)
         info = {}
-        return self._get_obs(), info
+        return self._get_obs()
     
     def close(self):
         print("closing environment, moving to wash position")
@@ -247,4 +247,4 @@ class OerEnvironmentSim (Env):
     #     return overpotential(line_fit)
     
     def _get_obs(self) -> tuple:
-        return np.asarray(self.potentiostat.get_actual_values())
+        return np.asarray([0, 0, 0]).astype(np.float32)
